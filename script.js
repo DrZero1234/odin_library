@@ -1,5 +1,5 @@
 let myLibrary = []
-
+const LIBRARY_TBODY = document.querySelector(".library-tbody")
 
 function Book(title, author, year) {
   this.title = title;
@@ -19,6 +19,18 @@ Book.prototype.addBookToLibrary = function() {
 }
 
 function displayBooks() {
+  for (const book of myLibrary) {
+    let table_row = document.createElement("tr");
+
+    for (const key in book) {
+
+      let new_cell = document.createElement("td");
+      new_cell.textContent = book[key];
+      table_row.appendChild(new_cell);
+    }
+    LIBRARY_TBODY.appendChild(table_row);
+
+  }
   // Displays every book in the library one by one
 
   // Display the books in a table where every book has its own row
@@ -29,7 +41,11 @@ function displayBooks() {
 }
 
 little_prince = new Book("The Little Prince", "Antoine de Saint-Exupéry", 1943)
+the_hobbit = new Book("The Hobbit", "J. R. R. Tolkien", 1937)
 
 console.log(little_prince)
 little_prince.addBookToLibrary()
+the_hobbit.addBookToLibrary()
 console.log(myLibrary)
+
+displayBooks()
