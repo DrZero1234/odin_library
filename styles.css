@@ -1,0 +1,16 @@
+.library {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-rows: auto;
+    grid-gap: 50px;
+}
+
+.book {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid black;
+    background-color: red;
+    color: white;
+    justify-content: center;
+    align-items: center;
+}
