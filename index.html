@@ -10,30 +10,38 @@
 </head>
 <body>
     <div class = "container">
-        <button class = "book-form-btn">
-            + New book
-        </button>
+        <div class="form-div">
+            <button class = "book-form-btn">
+                + New book
+            </button>
+    
+            <form action="" method="get" class="inactive" id="book-form">
+                <label for="book-title">
+                    <span>Title:</span>
+                </label>
+                <input type="text" id="book-title" name="book_title" required>
+                <label for="book-author">
+                    <span>Author:</span>
+                </label>
+                <input type="text" id="book-author" name="book_author" required>
+                <label for="book-year">
+                    <span>Release Year:</span>
+                </label>
+                <input type="number" name="book_year" id="book-year" min="0" max="2024" required>
+                <label for="book-pages">
+                    <span>Pages:</span>
+                <input type="number" name="book_pages" id="book-pages" min="10" max="15000" required>
+                </label>
+                <label for="book-read">
+                    <span>Read:</span>
+                </label>
+                <input type="checkbox" id="book-read" name="book_read">
+                <button type="submit">+ Add Book</button>
+    
+            </form>
 
-        <form action="" method="get" class="inactive" id="book-form">
-            <label for="book-title">
-                <span>Title:</span>
-            </label>
-            <input type="text" id="book-title" name="book_title" required>
-            <label for="book-author">
-                <span>Author:</span>
-            </label>
-            <input type="text" id="book-author" name="book_author" required>
-            <label for="book-year">
-                <span>Release Year:</span>
-            </label>
-            <input type="number" name="book_year" id="book-year" min="0" max="2024" required>
-            <label for="book-read">
-                <span>Read:</span>
-            </label>
-            <input type="checkbox" id="book-read" name="book_read">
-            <button type="submit">+ Add Book</button>
+        </div>
 
-        </form>
         <h2>Books</h2>
         <div class="library">
         
