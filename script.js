@@ -8,6 +8,8 @@ const BOOK_AUTHOR = document.querySelector("#book-author")
 const BOOK_YEAR = document.querySelector("#book-year")
 const BOOK_PAGES = document.querySelector("#book-pages")
 
+let form_data = new FormData(BOOK_FORM)
+
 function Book(title, author, year, pages) {
   this.title = title;
   this.author = author
@@ -34,17 +36,24 @@ BOOK_FORM_BTN.addEventListener("click", () => {
   }
 })
 
+/*
+
 BOOK_FORM.addEventListener("onsubmit", () => {
   let book_elem = new Book(BOOK_TITLE.textContent, BOOK_AUTHOR.textContent, Number(BOOK_YEAR.textContent),BOOK_PAGES )
   book_elem.addBookToLibrary();
   displayBooks()
 })
 
+*/
 
 function displayBooks() {
   for (const book of myLibrary) {
     let book_div = document.createElement("div");
     book_div.className = "book"
+    let remove_button = document.createElement("button")
+    remove_button.className = "remove-book"
+    remove_button.innerHTML = "Remove"
+
 
     for (const key in book) {
       if (key !== "read") {
@@ -56,8 +65,8 @@ function displayBooks() {
         }
         book_div.appendChild(new_cell)
       } 
-
     }
+    book_div.appendChild(remove_button)
     LIBRARY_ELEM.appendChild(book_div);
 
 
@@ -76,9 +85,9 @@ little_prince = new Book("The Little Prince", "Antoine de Saint-Exupéry", 1943,
 the_hobbit = new Book("The Hobbit", "J. R. R. Tolkien", 1937, 310)
 
 console.log(little_prince)
-for (let i = 0; i <= 10; i++) {
-  
-}
+
+little_prince.addBookToLibrary()
+the_hobbit.addBookToLibrary()
 console.log(myLibrary)
 
 displayBooks()
