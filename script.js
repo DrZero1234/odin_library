@@ -1,5 +1,7 @@
 let myLibrary = []
 const LIBRARY_ELEM = document.querySelector(".library")
+const BOOK_FORM_BTN = document.querySelector(".book-form-btn")
+const BOOK_FORM = document.querySelector("#book-form")
 
 function Book(title, author, year) {
   this.title = title;
@@ -15,8 +17,15 @@ Book.prototype.addBookToLibrary = function() {
     "year": this.year,
     "read": this.read
   });
-
 }
+
+BOOK_FORM_BTN.addEventListener("click", () => {
+  if (BOOK_FORM.className === "inactive") {
+    BOOK_FORM.className = "active"
+  } else {
+    BOOK_FORM.className = "inactive"
+  }
+})
 
 function displayBooks() {
   for (const book of myLibrary) {
@@ -49,10 +58,10 @@ the_hobbit = new Book("The Hobbit", "J. R. R. Tolkien", 1937)
 
 console.log(little_prince)
 for (let i = 0; i <= 10; i++) {
-  little_prince.addBookToLibrary()
-  the_hobbit.addBookToLibrary()
+  
 }
-
+little_prince.addBookToLibrary()
+the_hobbit.addBookToLibrary()
 console.log(myLibrary)
 
 displayBooks()
