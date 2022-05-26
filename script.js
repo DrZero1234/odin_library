@@ -1,4 +1,6 @@
-let myLibrary = []
+console.log(localStorage)
+
+
 const LIBRARY_ELEM = document.querySelector(".library")
 const BOOK_FORM_BTN = document.querySelector(".book-form-btn")
 const BOOK_FORM = document.querySelector("#book-form")
@@ -26,13 +28,7 @@ function Book(title, author, year, pages) {
 }
 
 Book.prototype.addBookToLibrary = function() {
-  return myLibrary.push({
-    "title": this.title,
-    "author": this.author,
-    "year": this.year,
-    "pages": this.pages,
-    "read": this.read
-  });
+  localStorage.setItem(this.title, JSON.stringify(this))
 }
 
 BOOK_FORM_BTN.addEventListener("click", () => {
@@ -53,6 +49,40 @@ BOOK_FORM.addEventListener("onsubmit", () => {
 
 */
 
+function displayBooks() {
+  Object.keys(localStorage).forEach((key) => {
+    book = JSON.parse(localStorage.getItem(key))
+    console.log(`Book: ${book}`)
+    let book_div = document.createElement("div");
+    book_div.className = "book"
+    book_div.id = book.title
+    book_div.style.backgroundColor = getRandomColor()
+    let remove_button = document.createElement("button")
+    remove_button.className = "remove-book"
+    remove_button.innerHTML = "Remove"
+    //TODO REMOVE FUNCTION 
+
+
+    Object.keys(book).forEach((book_data) => {
+      if (book_data != "read") {
+        let new_cell = document.createElement("h2");
+        if (book_data === "pages") {
+          new_cell.textContent = `${book[book_data]} pages`
+        } else {
+          new_cell.textContent = book[book_data];
+        }
+        book_div.appendChild(new_cell)
+      }
+    })
+
+    
+
+    LIBRARY_ELEM.appendChild(book_div)
+  })
+}
+
+displayBooks()
+/*
 function displayBooks() {
   LIBRARY_ELEM.innerHTML = ""
   for (let book of myLibrary) {
@@ -93,6 +123,9 @@ function displayBooks() {
   // Add a button to each book to change its read status. The read status should be stored in the Book contructor
 }
 
+*/
+
+
 FORM_BUTTON.addEventListener("click", ()=> {
   new_book = new Book(BOOK_TITLE.value, BOOK_AUTHOR.value,+BOOK_YEAR.value,+BOOK_PAGES.value)
   new_book.addBookToLibrary();
@@ -117,8 +150,7 @@ the_hobbit = new Book("The Hobbit", "J. R. R. Tolkien", 1937, 310)
 
 console.log(little_prince)
 
-little_prince.addBookToLibrary()
-the_hobbit.addBookToLibrary()
-console.log(myLibrary)
 
-displayBooks()
+//displayBooks()
+
+console.log(Object.keys(localStorage))
