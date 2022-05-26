@@ -1,5 +1,6 @@
 console.log(localStorage)
 
+let check_i = 0;
 
 const LIBRARY_ELEM = document.querySelector(".library")
 const BOOK_FORM_BTN = document.querySelector(".book-form-btn")
@@ -11,6 +12,7 @@ const BOOK_AUTHOR = document.querySelector("#book-author")
 const BOOK_YEAR = document.querySelector("#book-year")
 const BOOK_PAGES = document.querySelector("#book-pages")
 const FORM_BUTTON = document.getElementById("submit-book")
+const FORM_CHECK = document.getElementById("book-read")
 
 document.addEventListener("DOMContentLoaded", () => {
   const BOOK_ARRAY = LIBRARY_ELEM.querySelectorAll("div")
@@ -19,12 +21,12 @@ document.addEventListener("DOMContentLoaded", () => {
 let form_data = new FormData(BOOK_FORM)
 console.log(form_data)
 
-function Book(title, author, year, pages) {
+function Book(title, author, year, pages, read) {
   this.title = title;
   this.author = author
   this.year = year;
   this.pages = pages;
-  this.read = false;
+  this.read = read;
 }
 
 Book.prototype.addBookToLibrary = function() {
@@ -55,7 +57,9 @@ function displayBooks() {
     remove_button.addEventListener("click", () => {
       remove_book(key)
     })
-    //TODO REMOVE FUNCTION 
+
+
+
 
 
     Object.keys(book).forEach((book_data) => {
@@ -67,6 +71,35 @@ function displayBooks() {
           new_cell.textContent = book[book_data];
         }
         book_div.appendChild(new_cell)
+      } else {
+        let i;
+        let checkbox_label = document.createElement("label")
+        checkbox_label.setAttribute("for", check_i)
+        checkbox_label.textContent = "Read"
+    
+        let checkbox = document.createElement("input")
+        checkbox.setAttribute("type", "checkbox")
+        checkbox.id=check_i
+
+        // DOES NOT WORK
+
+        checkbox.addEventListener("click",() => {
+          item = JSON.parse(localStorage.getItem(book.title))
+          if (checkbox.checked) {
+            item.read = true
+            console.log(item.read)
+          } else {
+            item.read = false
+          }
+        })
+        check_i++
+
+        if (book[book_data] === true) {
+          checkbox.checked = true;
+        }
+    
+        checkbox_label.appendChild(checkbox)
+        book_div.appendChild(checkbox_label)
       }
     })
 
@@ -83,12 +116,20 @@ let remove_book = (key) => {
     item = localStorage.getItem(key);
     localStorage.removeItem(key);
     displayBooks()
+  } else {
+    alert("This key does not exist")
+    return
   }
 }
 
 
 FORM_BUTTON.addEventListener("click", ()=> {
-  new_book = new Book(BOOK_TITLE.value, BOOK_AUTHOR.value,+BOOK_YEAR.value,+BOOK_PAGES.value)
+  if (FORM_CHECK.checked) {
+    read = true;
+  } else {
+    read = false
+  }
+  new_book = new Book(BOOK_TITLE.value, BOOK_AUTHOR.value,+BOOK_YEAR.value,+BOOK_PAGES.value,read)
   new_book.addBookToLibrary();
   displayBooks();
 })
