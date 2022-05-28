@@ -21,17 +21,20 @@ document.addEventListener("DOMContentLoaded", () => {
 let form_data = new FormData(BOOK_FORM)
 console.log(form_data)
 
-function Book(title, author, year, pages, read) {
-  this.title = title;
-  this.author = author
-  this.year = year;
-  this.pages = pages;
-  this.read = read;
+class Book {
+  constructor(title, author, year, pages, read) {
+    this.title = title;
+    this.author = author
+    this.year = year;
+    this.pages = pages;
+    this.read = read;
+  }
+
+  addBookToLibrary = () => {
+    localStorage.setItem(this.title, JSON.stringify(this))
+  }
 }
 
-Book.prototype.addBookToLibrary = function() {
-  localStorage.setItem(this.title, JSON.stringify(this))
-}
 
 BOOK_FORM_BTN.addEventListener("click", () => {
   if (BOOK_FORM.className === "inactive") {
@@ -75,7 +78,7 @@ function displayBooks() {
         let i;
         let checkbox_label = document.createElement("label")
         checkbox_label.setAttribute("for", check_i)
-        checkbox_label.textContent = "Read"
+        checkbox_label.textContent = "Read "
     
         let checkbox = document.createElement("input")
         checkbox.setAttribute("type", "checkbox")
