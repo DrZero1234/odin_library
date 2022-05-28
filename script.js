@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 let form_data = new FormData(BOOK_FORM)
 console.log(form_data)
 
-class Book {
+let Book = class {
   constructor(title, author, year, pages, read) {
     this.title = title;
     this.author = author
@@ -48,7 +48,7 @@ BOOK_FORM_BTN.addEventListener("click", () => {
 
 function displayBooks() {
   LIBRARY_ELEM.innerHTML = ""
-  Object.keys(localStorage).forEach((key) => {
+  Object.keys(localStorage).reverse().forEach((key) => {
     book = JSON.parse(localStorage.getItem(key))
     console.log(`Book: ${book}`)
     let book_div = document.createElement("div");
