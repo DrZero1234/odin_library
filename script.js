@@ -54,7 +54,7 @@ function displayBooks() {
       console.log(`Book: ${book}`);
       let book_div = document.createElement("div");
       book_div.className = "book";
-      book_div.id = book.title;
+      book_div.id = book.id;
       let remove_button = document.createElement("button");
       remove_button.className = "remove-book";
       remove_button.innerHTML = "Remove";
@@ -84,18 +84,18 @@ function displayBooks() {
           // DOES NOT WORK
 
           checkbox.addEventListener("click", () => {
-            
-            item = localStorage.getItem(book.id);
-            item_json = JSON.parse(item) 
-            if (checkbox.checked) {
-              item_json.read = true;
+            let book_elem = localStorage.getItem(key);
+            let book_json = JSON.parse(book_elem);
+            if (book_json.read) {
+              book_json.read = false;
             } else {
-              item_json.read = false;
+              book_json.read = true
             }
-            localStorage.setItem(book.id, JSON.stringify(item_json))
-          });
+            localStorage.setItem(key, JSON.stringify(book_json))
+          })
 
-          if (book[book_data] === true) {
+
+          if (book.read === true) {
             checkbox.checked = true;
           }
 
@@ -145,6 +145,8 @@ function getRandomColor() {
   }
   return color;
 }
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
   displayBooks();
