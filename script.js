@@ -1,6 +1,7 @@
 console.log(localStorage);
 
-let check_i = 0;
+
+
 
 const LIBRARY_ELEM = document.querySelector(".library");
 const BOOK_FORM_BTN = document.querySelector(".book-form-btn");
@@ -22,6 +23,7 @@ console.log(form_data);
 
 let Book = class {
   constructor(title, author, year, pages, read) {
+    this.id = Date.now();
     this.title = title;
     this.author = author;
     this.year = year;
@@ -30,7 +32,7 @@ let Book = class {
   }
 
   addBookToLibrary = () => {
-    localStorage.setItem(this.title, JSON.stringify(this));
+    localStorage.setItem(this.id, JSON.stringify(this));
   };
 };
 
@@ -43,6 +45,7 @@ BOOK_FORM_BTN.addEventListener("click", () => {
 });
 
 function displayBooks() {
+  // Generating the book "cards"
   LIBRARY_ELEM.innerHTML = "";
   Object.keys(localStorage)
     .reverse()
@@ -71,25 +74,26 @@ function displayBooks() {
         } else {
           let i;
           let checkbox_label = document.createElement("label");
-          checkbox_label.setAttribute("for", check_i);
+          checkbox_label.setAttribute("for", book.id);
           checkbox_label.textContent = "Read ";
 
           let checkbox = document.createElement("input");
           checkbox.setAttribute("type", "checkbox");
-          checkbox.id = check_i;
+          checkbox.id = book.id;
 
           // DOES NOT WORK
 
           checkbox.addEventListener("click", () => {
-            item = JSON.parse(localStorage.getItem(book.title));
+            
+            item = localStorage.getItem(book.id);
+            item_json = JSON.parse(item) 
             if (checkbox.checked) {
-              item.read = true;
-              console.log(item.read);
+              item_json.read = true;
             } else {
-              item.read = false;
+              item_json.read = false;
             }
+            localStorage.setItem(book.id, JSON.stringify(item_json))
           });
-          check_i++;
 
           if (book[book_data] === true) {
             checkbox.checked = true;
@@ -142,4 +146,7 @@ function getRandomColor() {
   return color;
 }
 
-displayBooks();
+document.addEventListener("DOMContentLoaded", () => {
+  displayBooks();
+})
+
