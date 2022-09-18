@@ -10,9 +10,10 @@ html {
 }
 
 .container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(1fr, 2fr));
+    display: flex;
+    flex-direction: column;
     gap: 30px;
+    padding: 6px;
 }
 
 .inactive {
@@ -24,8 +25,30 @@ html {
     grid-column: 1;
 }
 
-#book-form {
+#form-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.book-form-btn {
+    width: fit-content;
+    color: white;
+    padding: 8px;
+    cursor: pointer;
+    background-color: #6495ed;
+    font-size: 32px;
+    font-weight: 900;
+}
+
+
+#book-form.active {
+    display: flex;
+    flex-direction: column;
     margin-top: 10px;
+    align-items: center;
+
 }
 
 #book-form * {
@@ -41,7 +64,6 @@ input[type="number"] {
 }
 
 #book-form input[type="text"] {
-    width: 100%;
 }
 
 #book-form button {
@@ -59,11 +81,12 @@ input[type="number"] {
 
 .library {
     display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     grid-template-rows: auto;
     grid-gap: 30px;
     grid-column: 2;
     border-left: 3px solid black;
+    padding: 50px;
 }
 
 .book {
@@ -77,6 +100,19 @@ input[type="number"] {
     padding: 10px;
     align-items: center;
     gap: 50px;
+}
+
+#paper {
+    display: flex;
+    flex-direction: column;
+    height: 20px;
+    width: 100%;
+    background-color: #FFFF
+}
+
+#main-title {
+    text-align: center;
+    margin: 20px 0px;
 }
 
 

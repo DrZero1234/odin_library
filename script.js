@@ -55,6 +55,10 @@ function displayBooks() {
       let book_div = document.createElement("div");
       book_div.className = "book";
       book_div.id = book.id;
+      let paper_div = document.createElement("div");
+      paper_div.id = "paper";
+      book_div.appendChild(paper_div)
+
       let remove_button = document.createElement("button");
       remove_button.className = "remove-book";
       remove_button.innerHTML = "Remove";
@@ -74,12 +78,12 @@ function displayBooks() {
         } else if (book_data === "read") {
           let i;
           let checkbox_label = document.createElement("label");
-          checkbox_label.setAttribute("for", book.id);
+          checkbox_label.setAttribute("for", "cbox" + book.id);
           checkbox_label.textContent = "Read ";
 
           let checkbox = document.createElement("input");
           checkbox.setAttribute("type", "checkbox");
-          checkbox.id = book.id;
+          checkbox.id = "cbox" + book.id;
 
           // DOES NOT WORK
 
