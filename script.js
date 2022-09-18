@@ -63,7 +63,7 @@ function displayBooks() {
       });
 
       Object.keys(book).forEach((book_data) => {
-        if (book_data != "read") {
+        if (book_data != "id" && book_data != "read") {
           let new_cell = document.createElement("h2");
           if (book_data === "pages") {
             new_cell.textContent = `${book[book_data]} pages`;
@@ -71,7 +71,7 @@ function displayBooks() {
             new_cell.textContent = book[book_data];
           }
           book_div.appendChild(new_cell);
-        } else {
+        } else if (book_data === "read") {
           let i;
           let checkbox_label = document.createElement("label");
           checkbox_label.setAttribute("for", book.id);
