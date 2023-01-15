@@ -1,7 +1,15 @@
-console.log(localStorage);
+import { firebaseConfig } from "./firebase-config";
+import {initializeApp} from "firebase/app"
+import {getFirestore} from "firebase/firestore/lite"
 
 
+const app = initializeApp(firebaseConfig)
+const db = getFirestore(app);
 
+console.log(localStorage)
+
+console.log(app);
+console.log(db)
 
 const LIBRARY_ELEM = document.querySelector(".library");
 const BOOK_FORM_BTN = document.querySelector(".book-form-btn");
