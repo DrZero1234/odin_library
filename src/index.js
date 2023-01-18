@@ -1,15 +1,74 @@
 import { firebaseConfig } from "./firebase-config";
 import {initializeApp} from "firebase/app"
-import {getFirestore} from "firebase/firestore/lite"
+import {getFirestore,collection,query,orderBy,setDoc,addDoc, doc} from "firebase/firestore"
+import {getAuth,GoogleAuthProvider,signInWithPopup,signOut, onAuthStateChanged} from "firebase/auth"
 
+// FIREBASE ELEMENTS
 
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app);
+const auth = getAuth();
 
-console.log(localStorage)
 
-console.log(app);
-console.log(db)
+
+console.log()
+
+
+// HTML ELEMENTS
+
+const header_username = document.getElementById("header-username");
+const singin_btn = document.getElementById("header-signin-btn");
+const signout_btn = document.getElementById("header-signout-btn");
+
+// Events
+
+singin_btn.addEventListener("click", signIn)
+signout_btn.addEventListener("click", signOutUser)
+
+// AUTH BEGIN
+
+async function signIn() {
+  var provider = new GoogleAuthProvider();
+  await signInWithPopup(getAuth(), provider);
+}
+
+async function signOutUser() {
+  signOut(getAuth())
+}
+
+function isUserSignedIn() {
+  return !!auth().currentUser;
+}
+
+function initFirebaseAuth() {
+  onAuthStateChanged(getAuth(), authStateUi)
+}
+
+function authStateUi(user) {
+  if (user) {
+    header_username.removeAttribute("hidden");
+    singin_btn.setAttribute("hidden", true);
+    signout_btn.removeAttribute("hidden");
+  } else {
+    header_username.setAttribute("hidden", true);
+    singin_btn.removeAttribute("hidden");
+    signout_btn.setAttribute("hidden", true)
+
+  }
+}
+
+
+onAuthStateChanged(auth,function(user) {
+  if (user) {
+    // User is signed in.
+  } else {
+
+    // No user is signed in.
+  }
+});
+
+// AUTH END
+
 
 const LIBRARY_ELEM = document.querySelector(".library");
 const BOOK_FORM_BTN = document.querySelector(".book-form-btn");
@@ -44,7 +103,8 @@ let Book = class {
   };
 };
 
-BOOK_FORM_BTN.addEventListener("click", () => {
+BOOK_FORM_BTN.addEventListener("click", (e) => {
+  e.preventDefault();
   if (BOOK_FORM.className === "inactive") {
     BOOK_FORM.className = "active";
   } else {
@@ -58,7 +118,7 @@ function displayBooks() {
   Object.keys(localStorage)
     .reverse()
     .forEach((key) => {
-      book = JSON.parse(localStorage.getItem(key));
+      const book = JSON.parse(localStorage.getItem(key));
       console.log(`Book: ${book}`);
       let book_div = document.createElement("div");
       book_div.className = "book";
@@ -158,9 +218,7 @@ function getRandomColor() {
   return color;
 }
 
-
-
 document.addEventListener("DOMContentLoaded", () => {
+  initFirebaseAuth();
   displayBooks();
 })
-
