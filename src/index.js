@@ -1,6 +1,6 @@
 import { firebaseConfig } from "./firebase-config";
 import {initializeApp} from "firebase/app"
-import {getFirestore,collection,query,orderBy,setDoc,addDoc, doc} from "firebase/firestore"
+import {getFirestore,collection,query,orderBy,setDoc,addDoc, doc, serverTimestamp} from "firebase/firestore"
 import {getAuth,GoogleAuthProvider,signInWithPopup,signOut, onAuthStateChanged} from "firebase/auth"
 
 // FIREBASE ELEMENTS
@@ -8,6 +8,8 @@ import {getAuth,GoogleAuthProvider,signInWithPopup,signOut, onAuthStateChanged} 
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app);
 const auth = getAuth();
+
+
 
 
 
@@ -19,11 +21,13 @@ console.log()
 const header_username = document.getElementById("header-username");
 const singin_btn = document.getElementById("header-signin-btn");
 const signout_btn = document.getElementById("header-signout-btn");
+const header_profile_picture = document.getElementById("header-profile-picture");
 
 // Events
 
 singin_btn.addEventListener("click", signIn)
 signout_btn.addEventListener("click", signOutUser)
+header_username.textContent = isUserSignedIn() ? getUserName() : ""
 
 // AUTH BEGIN
 
@@ -37,7 +41,7 @@ async function signOutUser() {
 }
 
 function isUserSignedIn() {
-  return !!auth().currentUser;
+  return !!getAuth().currentUser;
 }
 
 function initFirebaseAuth() {
@@ -46,15 +50,35 @@ function initFirebaseAuth() {
 
 function authStateUi(user) {
   if (user) {
+    header_username.textContent = getUserName();
+    header_profile_picture.style.backgroundImage = 'url(' + addSizeToGoogleProfilePic(getProfilePicture()) + ')';
+
+    header_profile_picture.removeAttribute("hidden")
     header_username.removeAttribute("hidden");
     singin_btn.setAttribute("hidden", true);
     signout_btn.removeAttribute("hidden");
   } else {
+    header_profile_picture.setAttribute("hidden", true);
     header_username.setAttribute("hidden", true);
     singin_btn.removeAttribute("hidden");
     signout_btn.setAttribute("hidden", true)
 
   }
+}
+
+ function addSizeToGoogleProfilePic(url) {
+   if (url.indexOf('googleusercontent.com') !== -1 && url.indexOf('?') === -1) {
+     return url + '?sz=150';
+   }
+   return url;
+ }
+
+function getUserName() {
+  return getAuth().currentUser.displayName
+}
+
+function getProfilePicture() {
+  return getAuth().currentUser.photoURL || "default.png"
 }
 
 
@@ -68,6 +92,24 @@ onAuthStateChanged(auth,function(user) {
 });
 
 // AUTH END
+
+// FIRESTORE BEGIN
+
+async function saveBook(book_name) {
+  try {
+    await addDoc(collection(getFirestore(), "books"), {
+      name: getUserName(),
+      bookName: book_name,
+      profilePicUrl: getProfilePicture(),
+      timestamp: serverTimestamp()
+    });
+  }
+  catch(error) {
+    console.error("Error writing book to the Firebase database", error);
+  }
+}
+
+// FIRESTORE END
 
 
 const LIBRARY_ELEM = document.querySelector(".library");
