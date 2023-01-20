@@ -1,6 +1,6 @@
 import { firebaseConfig } from "./firebase-config";
 import {initializeApp} from "firebase/app"
-import {getFirestore,collection,query,orderBy,setDoc,addDoc, doc, serverTimestamp} from "firebase/firestore"
+import {getFirestore,collection,query,orderBy,setDoc,addDoc, doc, serverTimestamp, QueryStartAtConstraint, where} from "firebase/firestore"
 import {getAuth,GoogleAuthProvider,signInWithPopup,signOut, onAuthStateChanged} from "firebase/auth"
 
 // FIREBASE ELEMENTS
@@ -101,6 +101,10 @@ function getProfilePicture() {
   return getAuth().currentUser.photoURL || "default.png"
 }
 
+function getUserId() {
+  return getAuth().currentUser.uid;
+}
+
 function checkSignedInWithMessage() {
   // Return true if the user is signed in Firebase
   if (isUserSignedIn()) {
@@ -125,10 +129,10 @@ async function saveBook(book_title,book_author,book_release_year,book_pages) {
       name: getUserName(),
       bookName: book_title,
       bookAuthor: book_author,
-      bookReleaseYear: book_release_year,
-      bookPages: book_pages,
+      bookReleaseYear: +book_release_year,
+      bookPages: +book_pages,
       bookRead: false,
-      profilePicUrl: getProfilePicture(),
+      userId: getUserId(),
       timestamp: serverTimestamp()
     });
     alert("Success")
@@ -137,6 +141,15 @@ async function saveBook(book_title,book_author,book_release_year,book_pages) {
     console.error("Error writing book to the Firebase database", error);
   }
 }
+
+function loadBooks() {
+  const user = getAuth().currentUser
+  const books = collection(getFirestore(), "books");
+  const user_books = query(books, where("userId", "==", user.uid), orderBy("timestamp", "desc"));
+  console.log(user_books)
+}
+
+loadBooks()
 
 function onBookSumbit(e) {
   e.preventDefault();
