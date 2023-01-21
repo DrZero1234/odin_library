@@ -1,6 +1,6 @@
 import { firebaseConfig } from "./firebase-config";
 import {initializeApp} from "firebase/app"
-import {getFirestore,collection,query,orderBy,setDoc,addDoc, doc, serverTimestamp, QueryStartAtConstraint, where} from "firebase/firestore"
+import {getFirestore,collection,query,orderBy,setDoc,addDoc, doc, serverTimestamp, QueryStartAtConstraint, where, onSnapshot} from "firebase/firestore"
 import {getAuth,GoogleAuthProvider,signInWithPopup,signOut, onAuthStateChanged} from "firebase/auth"
 
 // FIREBASE ELEMENTS
@@ -143,10 +143,22 @@ async function saveBook(book_title,book_author,book_release_year,book_pages) {
 }
 
 function loadBooks() {
-  const user = getAuth().currentUser
+  var user = getAuth().currentUser
   const books = collection(getFirestore(), "books");
-  const user_books = query(books, where("userId", "==", user.uid), orderBy("timestamp", "desc"));
-  console.log(user_books)
+  console.log(books)
+  const user_books = query(books, where("userId", "==", user), orderBy("timestamp", "desc"));
+  
+  onSnapshot(user_books, function(snapshot) {
+    snapshot.docChanges().forEach(function(change){
+      if (change.type === "removed") {
+        deleteBook(change.doc.id);
+      } else {
+        var book = change.doc.data();
+        displayBook(change.doc.id, book.timestamp,book.bookName,book.bookAuthor,book.bookReleaseYear,book.bookPages,book.bookRead)
+      }
+    })
+  })
+
 }
 
 loadBooks()
