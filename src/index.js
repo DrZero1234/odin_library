@@ -21,7 +21,14 @@ const LIBRARY_ELEM = document.querySelector(".library");
 const BOOK_FORM_BTN = document.querySelector(".book-form-btn");
 const BOOK_FORM = document.querySelector("#book-form");
 
-
+const BOOK_TEMPLATE = '<div class="book">' + 
+                          '<h2 class="book-title">Book 1</h2>' + 
+                          '<h2 class = "book-author">Thomas Thomas</h2>\ + 
+                          '<h2 class = "book-year">3</h2>' + 
+                          '<h2 class = "book-pages"> 13 pages</h2>' + 
+                          //'<label for="id">Read <input type="checkbox" id="id"></label>' + 
+                          //'<button class="remove-book">Remove</button>' + 
+                         '</div>'
 
 const BOOK_TITLE = document.querySelector("#book-title");
 const BOOK_AUTHOR = document.querySelector("#book-author");
@@ -159,6 +166,41 @@ function loadBooks() {
     })
   })
 
+}
+
+function createAndInsertBook(id,timestamp) {
+  const container = document.createElement("div");
+  container.innerHTML = BOOK_TEMPLATE;
+  const div = container.firstChild;
+  div.setAttribute("id",id);
+
+  timestamp = timestamp ? timestamp.toMillis() : Date.now();
+  div.setAttribute('timestamp', timestamp);
+
+  const existingBooks = LIBRARY_ELEM.children;
+  if (existingBooks.length === 0){
+    LIBRARY_ELEM.appendChild(div);
+  } else {
+    bookListNode = existingBooks[0];
+
+    while (bookListNode) {
+      const bookListNodeTime = bookListNode.getAttribute("timestamp");
+      if (!bookListNodeTime) {
+        throw new Error(
+          `Child ${bookListNode.id} has no 'timestamp' attribute`
+        )
+      }
+      if (bookListNodeTime > timestamp) {
+        break;
+      }
+
+      bookListNode = bookListNode.nextSibling;
+    }
+
+    LIBRARY_ELEM.insertBefore(div, bookListNode)
+  }
+
+  return div;
 }
 
 loadBooks()
